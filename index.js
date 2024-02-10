@@ -2,12 +2,13 @@ const express = require('express');
 const cors = require('cors');
 require("dotenv").config()
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 // middleware
 app.use(cors());
-app.use(express());
+app.use(express.json());
 
 app.get("/", (req, res) => {
     res.send('assignment submission is pending')
@@ -29,15 +30,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    const toyCollections = client.db("assignment-11").collection("toys");
+
+    // 1. create <---> post operation
+    app.post('/toys', async(req, res) => {
+        const toy = req.body;
+      const result = await toyCollections.insertOne(toy);
+      res.send(result);
+    })
+
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    // await client.close();
   }
 }
-run().catch(console.dir);
+run().catch(console.log);
 
 
 app.listen(port, () => {
