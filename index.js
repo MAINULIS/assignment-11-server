@@ -53,6 +53,14 @@ async function run() {
       res.send(result);
     })
 
+    // 4. Delete specific data
+    app.delete('/toys/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      result = await toyCollections.deleteOne(query);
+      res.send(result);
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -61,7 +69,7 @@ async function run() {
     // Ensures that the client will close when you finish/error
   }
 }
-run().catch(console.log);
+run().catch(console.dir);
 
 
 app.listen(port, () => {
