@@ -39,6 +39,17 @@ async function run() {
       const result = await toyCollections.findOne(query);
       res.send(result)
     })
+    // get data according to subcategory
+    app.get('/toys', async(req, res) => {
+      let query = {};
+      if(req.query?.subCategory){
+        query = {subCategory: req.query?.subCategory}
+      }
+      // console.log(query)
+      const result = await toyCollections.find(query).toArray();
+      res.send(result)
+      // console.log(result)
+    })
 
     // 2. read all data
     app.get("/toys", async(req, res) => {
