@@ -39,17 +39,19 @@ async function run() {
       const result = await toyCollections.findOne(query);
       res.send(result)
     })
-    // get data according to subcategory
-    app.get('/toys', async(req, res) => {
+    //  2.00 get data according to subCategory and email
+    app.get('/toys', async (req, res) => {
       let query = {};
-      if(req.query?.subCategory){
-        query = {subCategory: req.query?.subCategory}
+    
+      if (req.query.subCategory) {
+        query = { subCategory: req.query.subCategory };
+      } else if (req.query.sellerEmail) {
+        query = { sellerEmail: req.query.sellerEmail };
       }
-      // console.log(query)
+    
       const result = await toyCollections.find(query).toArray();
-      res.send(result)
-      // console.log(result)
-    })
+      res.send(result);
+    });
 
     // 2. read all data
     app.get("/toys", async(req, res) => {
